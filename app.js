@@ -11,7 +11,7 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-app.options('*', cors())
+app.use(cors({ origin: true }));
 
 let transporterReady = false;
 let transporter = nodemailer.createTransport({
