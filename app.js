@@ -21,6 +21,7 @@ var whitelist = ['https://mathisengels.fr', 'https://www.mathisengels.fr']
 //  }
 // }
 app.use(cors({origin: whitelist}));
+app.options("*", cors({origin: whitelist}));
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
