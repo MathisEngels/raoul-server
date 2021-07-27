@@ -11,9 +11,7 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-    origin: "http://localhost"
-}));
+app.options('*', cors())
 
 let transporterReady = false;
 let transporter = nodemailer.createTransport({
