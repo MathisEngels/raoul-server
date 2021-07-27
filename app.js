@@ -11,17 +11,16 @@ const app = express()
 
 app.set('trust proxy', true);
 var whitelist = ['https://mathisengels.fr', 'https://www.mathisengels.fr']
-// var corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//  }
-// }
-app.use(cors({origin: whitelist}));
-app.options("*", cors({origin: whitelist}));
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+ }
+}
+app.use(cors(corsOptions));
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
