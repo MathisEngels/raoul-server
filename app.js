@@ -45,7 +45,6 @@ app.post(
     "/message",
     body("email").optional({ checkFalsy: true }).isEmail().normalizeEmail(),
     body("message").isString().notEmpty().trim().escape(),
-    body("ip").isString().isLength({ min: 8, max: 16 }),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -53,14 +52,15 @@ app.post(
         }
         body("message").run(req);
 
-        if (transporterReady && ban_ips.indexOf(req.body.ip) === -1) {
+        const ip = req.headers['x-forwarded-for'];
+        if (transporterReady && ban_ips.indexOf(ip) === -1) {
             var mail = {
                 from: process.env.MAIL_FROM,
                 to: process.env.MAIL_TO,
-                subject: `Raoul - Nouveau message de ${req.body.ip}`,
-                text: `${moment().format('DD/MM/YYYY, H:mm:ss')} - ${req.body.ip}  ` + req.body.message + req.body.email ? ` contact email : ${req.body.email}` : "",
+                subject: `Raoul - Nouveau message de ${ip}`,
+                text: `${moment().format('DD/MM/YYYY, H:mm:ss')} - ${ip}  ` + req.body.message + req.body.email ? ` contact email : ${req.body.email}` : "",
                 html: `
-                <p>${moment().format('DD/MM/YYYY, H:mm:ss')} - ${req.body.ip}</p>
+                <p>${moment().format('DD/MM/YYYY, H:mm:ss')} - ${ip}</p>
                 <p>${req.body.message}</p>
                 ${req.body.email ? `
                     <p>Contact : ${req.body.email}</p>
