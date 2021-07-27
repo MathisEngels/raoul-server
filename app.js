@@ -52,7 +52,7 @@ app.post(
         }
         body("message").run(req);
 
-        const ip = req.headers['x-forwarded-for'];
+        const ip = req.headers['X-Real-IP'];
         if (transporterReady && ban_ips.indexOf(ip) === -1) {
             var mail = {
                 from: process.env.MAIL_FROM,
