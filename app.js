@@ -14,9 +14,16 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
 var whitelist = ['https://mathisengels.fr', 'https://www.mathisengels.fr']
-app.use(cors({
-    origin: whitelist
-}));
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(null, false)
+    }
+ }
+}
+app.use(cors(corsOptions));
 
 let transporterReady = false;
 let transporter = nodemailer.createTransport({
